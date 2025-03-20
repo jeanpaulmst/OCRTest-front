@@ -1,0 +1,24 @@
+
+.inputs {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 4vh;
+    margin-top: 4vh;
+    
+}
+.inputs button {
+    margin-left: 6vh;
+}
+.inputs input {
+    margin-right: 6vh;
+
+    padding: 10px 15px; /* Más espacio interno */
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    border: 2px solid #ccc; /* Borde personalizado */
+    border-radius: 5px; /* Bordes redondeados */
+    
+    cursor: pointer;
+}
