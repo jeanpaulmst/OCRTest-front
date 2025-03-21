@@ -2,27 +2,26 @@
 import axios from 'axios';
 
 
+const pdfToJson = async (file: File) => {
 
-const pdfToJson = async (file: File | null) => {
-
-    let response = null
+    console.log("Convirtiendo PDF a JSON...");
     try {
-
-        //TO-DO: Pasarle el archivo a la API
-        response =  (await axios.post('http://localhost:3000/ocr')).request(
-            file,
-            {
-                headers: {
-                    'Content-Type': 'application/pdf'
-                }
-            }
-        )
+        const formData = new FormData();
+        formData.append("file", file);
         
-    } catch(error){
-        console.log(error)
+        const url = 'http://localhost:3000/ocr';
+
+        const response = await axios.post(url, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        console.log("Respuesta de la conversión OCR:", response);
+
+        return response
+    } catch (error) {
+        console.error("Error en la conversión OCR:", error);
+        return null;
     }
-    
-    return response
-}
+};
 
 export default pdfToJson

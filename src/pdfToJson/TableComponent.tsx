@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import pdfToJson from "./pdfToJson"
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,31 +19,23 @@ interface RowData {
     saldo_adeudado: string
 }
 
-interface TableProps{
-    file: File | null
+interface DataJson {
+    table: RowData[],
+    total: string
 }
 
-export default function TableComponent({ file } : TableProps) {
+interface TableProps {
+    json: DataJson
+}
 
-    const [dataJson, setDataJson] = useState<any>(null)
-    const [loading, setLoading] = useState(false)
+
+
+export default function TableComponent({ json }  : TableProps) {
+
+   
     //const [dataJsonWithInterests, setDataJsonWithInterests] = useState<any>(null)
 
-    //Obtener datos de la tabla
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            try {
-                const response = await pdfToJson(file)
-                console.log(response)
-                setDataJson(response?.data)
-            } catch (error) {
-                console.log(error)
-            }
-            setLoading(false)
-        }
-        fetchData()
-    }, [])
+    
 
     //TO-DO: Calcular intereses
     calculateInterests();
@@ -64,8 +55,8 @@ export default function TableComponent({ file } : TableProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {dataJson && Array.isArray(dataJson.table) ? (
-                        dataJson.table.map((row: RowData, index: number) => (
+                    {
+                        json.table.map((row: RowData, index: number) => (
                         <TableRow key={index}>
                             <TableCell align="right">{row.tipo}</TableCell>
                             <TableCell align="right">{row.factura}</TableCell>
@@ -75,15 +66,13 @@ export default function TableComponent({ file } : TableProps) {
                             <TableCell align="right">{row.saldo_adeudado}</TableCell>
                         </TableRow>
                         ))
+                    }
                         
-                        ) : (
-                            <TableRow>
+                        <TableRow>
                             <TableCell colSpan={6} align="center">
-                                {loading ? "Cargando datos..." : "No hay datos disponibles"}
+                            {"TOTAL: " + json?.total}
                             </TableCell>
-                            </TableRow>
-                        )}
-                        <TableCell align="center">{"TOTAL: " + dataJson?.total}</TableCell>
+                        </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>
